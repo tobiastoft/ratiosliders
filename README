@@ -43,6 +43,11 @@ The following files would normally need to be included in the html:
 	<script type="text/javascript" src="ratiosegment.js"></script>
 	<script type="text/javascript" src="ratioslider.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
+	
+Alternatively, instead of ratiosegment.js and ratioslider.js the file 
+'ratioslider.min.js' can be used, which is a minified version of the
+two uncompressed files. It has been compressed using Google's Closure
+Compiler. See 'example.min.htm' for an example.
 
 There are two ways of configuring the slider. It can be done as a part
 of the creation of the RatioSlider object or the configuration can be
@@ -75,12 +80,14 @@ The 'total' is the total percentage, normally 100% but when over- or
 underprovisioning it will be e.g. 70% or 130%. The segments are always
 calculated as fractions of 1.
 
-Here's an example of a slider that will replace the form element named "ratioslider2":
+Here's an example of a slider that will replace the form element 
+named "ratioslider2":
 
 	var rs2 = new RatioSlider("ratioslider2", {"segments":{"Cheese burger":0.4,"Kebab":0.3,"Falafel":0.1,"Hot dog":0.2},"total":130});
 
-Please see the included 'example.htm' for an example of two sliders. The
-visual design of the sliders is defined in the 'css/ratioslider.css' file.
+Please see the included 'example.htm' for an example of two sliders and 
+example.min.htm for a version using the minified JS. The visual design
+of the sliders is defined in the 'css/ratioslider.css' file.
 
 Please note that this is a very early and not very thoroughly tested 
 version of the slider.

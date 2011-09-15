@@ -16,7 +16,6 @@ function RatioSlider(elmId, setup){
 	//Init variables
 	this.segments = new Array();
 	this.elmId = elmId;
-	this.allowUnderAllocation = false; //will allow the user to select less than the full amount (broken at the moment, feature not needed for BA instance)
 	this.segmentMinWidth = 10; //in pixels
 	this.increment = 1; //increments in percent when sliding
 	
@@ -86,7 +85,7 @@ RatioSlider.prototype.attachHandles = function(){
 		this.segments[i].setRatio();
 		this.segments[i].maxWidth = $(this.obj).width()-this.segmentMinWidth*(range-1);
 		
-		if (i<range-1 || this.allowUnderAllocation){
+		if (i<range-1){
 			this.segments[i].makeResizable();
 			$(this.segments[i].obj).bind('resizestart', {that: this}, this.startResizing);
 			$(this.segments[i].obj).bind('resizestop', {that: this}, this.stopResizing);
@@ -99,11 +98,12 @@ RatioSlider.prototype.startResizing = function(event, ui){
 	$(ui.element).bind('resize', {that:that}, that.adjustSegments);
 	var maxWidth=0;
 	for (var i=0; i<that.segments.length-1; i++){
-		that.segments[i].originalWidth = $(that.segments[i].obj).width();
 		that.segments[i].originalRight = $(that.segments[i].obj).width()+$(that.segments[i].obj).offset().left;
+		that.segments[i].originalWidth = $(that.segments[i].obj).width();
+		that.segments[i].wentSmaller = false;
 	}
 	
-	for (var i=0;i<that.segments.length-1;i++){
+	for (var i=0;i<that.segments.length;i++){
 		if (that.segments[i].elmId==$(ui.element).attr('id')){
 			var offset = $(that.segments[i].obj).offset().left;
 			maxWidth = $('#'+that.elmId).width()-offset-((that.segments.length-i-2)*that.segmentMinWidth);
@@ -121,20 +121,19 @@ RatioSlider.prototype.stopResizing = function(event, ui){
 
 RatioSlider.prototype.adjustSegments = function(event, ui){
 	var that;
+	var x = 0;
 	
 	try {
 		that = event.data.that;
 	} catch (e) {
-		that = this;	
+		that = this;
 	}
 	
 	//Reposition other elements
 	var parentWidth = $('#'+that.elmId).width(); //max width of the segments combined
-	var nextObj;
-
-	var currentIndex;
 
 	//Find resized div and link back to object
+	var currentIndex;
 	try {
 		for (var i=0;i<that.segments.length-1;i++){
 			if (that.segments[i].elmId==$(ui.element).attr('id')){
@@ -145,53 +144,91 @@ RatioSlider.prototype.adjustSegments = function(event, ui){
 		currentIndex = 0;
 	}
 	
-	//Run through and adjust positions and widths	
-	for (var i=currentIndex; i<that.segments.length-1; i++){
-		var nextObj = that.segments[i+1];
-		var curObj = that.segments[i];
-		var nextObjDomElm = $(nextObj.obj);
-		var curObjDomElm = $(curObj.obj);
+	try {
+		x = event.pageX - $(ui.element).offset().left;
+	} catch (e){}
+	
 		
-		nextObjDomElm.offset({left: curObjDomElm.offset().left + curObjDomElm.width()});		
+	//Move back
+	if (x<0 && currentIndex>0){
+		if ($(ui.element).offset().left + x > that.segmentMinWidth*(currentIndex+1)){
+			var val = $(ui.element).offset().left + x;
+			var grid = $('#'+that.elmId).width()/that.total*that.increment;
+			var snap = grid * Math.round(val/grid);
+		    $(ui.element).offset({left:snap});
+		} else {
+			$(ui.element).offset({left:that.segmentMinWidth*(currentIndex+1)});
+		}
+	}
+	
+	//Set elements before current
+	for (var i=currentIndex-1;i>=0;i--){
+		var newLeft;
+		var newWidth;
 		
-		var newWidth = nextObj.originalRight-nextObjDomElm.offset().left;
+		var cObj = that.segments[i];
+		var nObj = that.segments[i+1];
+		
+		var cObjD = $(that.segments[i].obj);
+		var nObjD = $(that.segments[i+1].obj);
+		
+		newLeft = cObjD.offset().left;
+		newWidth = nObjD.offset().left-cObjD.offset().left;
+		
+		if (i>0){
+			if (newWidth<that.segmentMinWidth){
+				newWidth = that.segmentMinWidth;
+			}
+			newLeft = nObjD.offset().left-newWidth;
+		}
+		
+		if (cObjD.width()<cObj.originalWidth){
+			cObj.wentSmaller = true;
+		}
+		
+		if (nObjD.width()>nObj.originalWidth && nObj.wentSmaller){
+			var diff = nObjD.width()-nObj.originalWidth;
+			newWidth+=diff;
+			nObjD.offset({left:nObjD.offset().left+diff});
+			nObjD.width(nObjD.width()-diff);
+		}
 		
 		if (newWidth<that.segmentMinWidth){
 			newWidth = that.segmentMinWidth;
 		}
 		
-		nextObjDomElm.width(newWidth);
+		cObjD.width(newWidth);
+		cObjD.offset({left: newLeft});
 	}
-	
-	//Stretch last element if we don't allow underallocation
-	if (!that.allowUnderAllocation){
-		var totalWidth = 0;
-		for (var i=0; i<that.segments.length-1;i++){
-			totalWidth+=$(that.segments[i].obj).width();
-		}
 		
-		var lastObj = that.segments[that.segments.length-1];
-		$(lastObj.obj).width((parentWidth-totalWidth));
-	}
-	
-	
-	
-	//React if we overflow
-	if (totalWidth>parentWidth){
-		console.log('Overflow!'+totalWidth);
-		var objNextInLine;
-		
-		//Get next in line
-		for (var i=that.segments.length-1; i>0; i--){
-			var obj = $(that.segments[i].obj);
-							
-			if (obj.width()>that.segments[i].minWidth){
-				objNextInLine = that.segments[i];
-				break;
-			}
+	//Set elements after current
+	for (var i=currentIndex; i<that.segments.length-1; i++){
+		var nObj = that.segments[i+1];
+		var cObj = that.segments[i];
+		var nObjD = $(nObj.obj);
+		var cObjD = $(cObj.obj);
+			
+		nObjD.offset({left: cObjD.offset().left + cObjD.width()});		
+			
+		var newWidth = nObj.originalRight-nObjD.offset().left;
+			
+		if (newWidth<that.segmentMinWidth){
+			newWidth = that.segmentMinWidth;
 		}
-		$(objNextInLine.obj).width($(objNextInLine.obj).width()+parentWidth-totalWidth);
+			
+		nObjD.width(newWidth);
 	}
+		
+	
+	//Stretch last element, we don't allow underallocation
+	var totalWidth = 0;
+	for (var i=0; i<that.segments.length-1;i++){
+		totalWidth+=$(that.segments[i].obj).width();
+	}
+		
+	var lastObj = that.segments[that.segments.length-1];
+	$(lastObj.obj).width((parentWidth-totalWidth));
+	
 	
 	//Move callouts
 	var overlaps = 0; //count overlaps

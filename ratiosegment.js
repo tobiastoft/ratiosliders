@@ -18,11 +18,13 @@ function RatioSegment(owner){
 	this.popupId = owner.elmId+'-'+this.elmId+'-popup';
 	this.minWidth = 10;
 	this.maxWidth = owner.total;
-	this.originalWidth; //for cascading resize
-	this.originalRight;
-	this.originalRatio;
 	this.obj = '#'+owner.elmId+'>#'+this.elmId; //DOM selector (makes life easier)
 	this.label = "Undefined";
+	this.wentSmaller = false;
+	
+	//this.originalRight; <-- We don't really need to declare these guys here
+	//this.originalRatio;     but they're nice as a reminder that they exist
+	//this.originalWidth;
 }
 
 RatioSegment.prototype.addHtml = function(){
