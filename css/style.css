@@ -1,0 +1,152 @@
+/* @override http://localhost/~ttoft/ratioslider/css/style.css */
+
+.ratioslider {
+	margin-top: 100px;
+	background-color:#dddddd;
+	width:550px;
+	height:50px;
+	position:relative;
+}
+
+#total{
+	font: 13px 'Helvetica', Arial, Verdana;
+	position: relative;
+	text-align: right;
+	margin-right: -50px;
+	line-height: 50px;
+	z-index: 1;
+	width: 50px;
+	float: right;
+}
+
+#reset{
+	font: 11px 'Helvetica', Arial, Verdana;
+	color: #666;
+	position: relative;
+	text-align: right;
+	margin-top: 5px;
+	z-index: 1;
+	float: right;
+	top: 50px;
+	padding: 3px 7px 1px 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+}
+
+#reset:hover{
+	color: #000;
+	cursor: pointer;
+	background-color: #eee;
+	-moz-box-shadow: 0px 1px 1px #aaa;
+	-webkit-box-shadow: 0px 1px 1px #aaa;
+	box-shadow: 0px 1px 1px #aaa;
+}
+
+#reset:active{
+	color: #000;
+	cursor: pointer;
+	background-color: #eee;
+	margin-top: 6px;
+	padding: 3px 7px 1px 7px;
+	-moz-box-shadow: 0px -1px 1px #bbb;
+	-webkit-box-shadow: 0px -1px 1px #bbb;
+	box-shadow: 0px -1px 1px #bbb;
+}
+
+.handle {
+	background-color:#eee;
+	width:20px;
+	height:50px;
+	top:0px;
+	position:absolute;
+	border: none;
+	border-left: 1px solid #fff;
+}
+
+#handle0 {
+	background-color: #eee;
+}
+
+#handle1 {
+	background-color: #eee;
+}
+
+#handle2 {
+	background-color: #eee;
+}
+
+#handle3 {
+	background-color: #eee;
+}
+
+#handle4 {
+	background-color: #eee;
+}
+
+#handle5 {
+	background-color: #eee;
+}
+
+.handle #content {
+	text-align:center;
+	position: relative;
+	font: 11px 'Helvetica', Arial, Verdana;
+	line-height: 50px;
+	width: 100%;
+	overflow: hidden;
+}
+
+.popup {
+	position: absolute;
+}
+
+.popup #content {
+	position: absolute;
+	font: 11px 'Helvetica', Arial, Verdana;
+	height: 20px;
+	border-left: 1px solid #ccc;
+	padding-left: 4px;
+	margin-top: -20px;
+	width: auto;
+	white-space: nowrap;
+	
+	-webkit-transition: all 0.15s ease-in-out;
+	-moz-transition: all 0.15s ease-in-out;
+	-o-transition: all 0.15s ease-in-out;
+	-ms-transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
+}
+
+.popup #content > #percentage {
+	margin-left:5px;
+	float: right;
+	color: #333;
+	display: none;
+}
+
+.popup #content > #label {
+	float: left;
+}
+
+.popup #content.overlap-0 {
+	margin-top: -20px;
+	height: 20px;
+}
+
+.popup #content.overlap-1 {
+	margin-top: -40px;
+	height: 40px;
+}
+
+.popup #content.overlap-2 {
+	margin-top: -60px;
+	height: 60px;
+}
+
+.popup #content.overlap-3 {
+	margin-top: -80px;
+	height: 80px;
+}
+
+/* Override JQuery UI */
+.ui-resizable-e { cursor: col-resize;}
