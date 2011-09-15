@@ -12,18 +12,35 @@
  * Date: 6 September 2011
  */
 
-function RatioSlider(elmId, segs, total){
-	this.initialSegments = segs;
-	this.total = total; //total percentage (e.g. 130%)
+function RatioSlider(elmId, setup){
+	//Init variables
 	this.segments = new Array();
 	this.elmId = elmId;
-	this.allowUnderAllocation = false; //will allow the user to select less than the full amount (broken at the moment)
-	this.segmentMinWidth = 10;
-	this.increment = 1; //increments in percent
+	this.allowUnderAllocation = false; //will allow the user to select less than the full amount (broken at the moment, feature not needed for BA instance)
+	this.segmentMinWidth = 10; //in pixels
+	this.increment = 1; //increments in percent when sliding
+	
+	//Read the JSON setup
+	if (setup==undefined){
+		try {
+			setup = $.parseJSON($('#'+elmId).val()); //Valid JSON?
+		} catch (e) {
+			alert('Missing or malformed JSON received through\nfield value for slider named "' + elmId + '."');
+			return;
+		}
+	}
+	
+	this.initialSetup = setup; //json
+	this.total = setup.total; //total percentage (e.g. 130%)
+	
+	//Init
+	this.init();
 }
 
+
 RatioSlider.prototype.init  = function(){
-	var newHtml = '<div class="ratioslider" id="' + this.elmId + '"><div id="total"></div><div id="reset">Reset</div></div>';
+	//Define the replacement html, including a hidden form field
+	var newHtml = '<div class="ratioslider" id="' + this.elmId + '"><div id="total"></div><div id="reset">Reset</div><input type="hidden" name="' + this.elmId + '"/></div>';
 
 	//Replace input field with custom slider
 	$('input#'+this.elmId).replaceWith(newHtml);
@@ -34,12 +51,16 @@ RatioSlider.prototype.init  = function(){
 	//Add handles and generally set this up
 	$('#'+this.elmId+'>#reset').bind('click', {that:this}, this.resetSlider);
 	
-	$.each(this.initialSegments, function(sName, sVal){
-       addSegment(sName, sVal);
+	
+	
+	var that = this; //keep scope
+	$.each(this.initialSetup.segments, function(sName, sVal){
+       that.addSegment(sName, sVal);
     })
 
 	this.attachHandles();
 	this.adjustSegments();
+	this.outputData(true); //Write initial value to hidden form field
 }
 
 RatioSlider.prototype.resetSlider = function(event,ui){
@@ -95,6 +116,7 @@ RatioSlider.prototype.startResizing = function(event, ui){
 RatioSlider.prototype.stopResizing = function(event, ui){
 	var that = event.data.that;
 	$(ui.element).unbind("resize", {that:that}, that.adjustSegments);
+	that.returnRatios(true);
 }
 
 RatioSlider.prototype.adjustSegments = function(event, ui){
@@ -210,10 +232,10 @@ RatioSlider.prototype.adjustSegments = function(event, ui){
 	that.returnRatios();
 }
 
-RatioSlider.prototype.returnRatios = function(){
+RatioSlider.prototype.returnRatios = function(bUpdateField){
 	ratios = new Array();
 	for (var i=0; i<this.segments.length; i++){
-		var ratio = this.segments[i].getRatio();
+		var ratio = Math.round(this.segments[i].getRatio()*100)/100;
 		ratios.push(ratio);
 		
 		//update text
@@ -227,9 +249,25 @@ RatioSlider.prototype.returnRatios = function(){
 			$(this.segments[i].obj+'>#content').show(200);
 		}
 	}
-	this.outputData(ratios);
+	
+	if (bUpdateField){
+		this.outputData(ratios);
+	}
 }
 
 RatioSlider.prototype.outputData = function(ratios){
-	console.log('['+ratios +'] x '+this.total+'%');
+	//Create json output in the same format as the input
+	var jsonOutput = '{"segments":{';
+	
+	for (var i=0; i<this.segments.length; i++){
+		jsonOutput += '"' + this.segments[i].label +'":' + Math.round(this.segments[i].getRatio()*100)/100;
+		if (i<this.segments.length-1){
+			jsonOutput += ',';
+		}
+	}
+	
+	jsonOutput += '},"total":' + this.total + '}';
+	
+	//Update hidden field
+	$('input[name="'+this.elmId+'"]').val(jsonOutput);
 }

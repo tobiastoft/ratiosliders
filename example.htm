@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>RatioSlider Example</title>
+    <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
+	<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.8.16.custom.min.js"></script>
+	<script type="text/javascript" src="jquery.json-2.2.min.js"></script>
+	
+	<script type="text/javascript" src="ratiosegment.js"></script>
+	<script type="text/javascript" src="ratioslider.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
+
+	<script>
+	  $(document).ready(function() {
+	  	var rs1 = new RatioSlider("ratioslider1");			  
+	  	var rs2 = new RatioSlider("ratioslider2", {"segments":{"Cheese burger":0.4,"Kebab":0.3,"Falafel":0.1,"Hot dog":0.2},"total":70});
+	  });
+  	</script>
+  </head>
+  
+  <body>
+  <form name="input" action="test.php" method="post">
+	<p>
+		<input type="text" id="ratioslider1" value="{&quot;segments&quot;:{&quot;Tequila&quot;:0.3,&quot;Rum&quot;:0.3,&quot;Beer&quot;:0.4}, &quot;total&quot;:110}"}" />
+	</p>
+	<p>
+		<input type="text" id="ratioslider2" />
+  	</p>
+  	<p>
+  		<input type="submit" value="Submit" />
+  	</p>
+  	</form>
+  </body>
+</html>
