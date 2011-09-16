@@ -4,24 +4,18 @@ Copyright 2011, Tobias Toft, IDEO Llc
 
 * Thanks to the brilliant people behind JQuery
 http://jquery.com
-
 * JQuery UI
 http://jqueryui.com
-
-*And the jquery-json plugin
+* And the jquery-json plugin
 http://code.google.com/p/jquery-json/
 
-Date: 6 September 2011
-
-***
-
+6 September 2011
 
 ##Description
 Replaces any DOM element with a segmented slider. The slider contains a 
 hidden form field with the same name as the replaced element, containing 
 the output values from the slider. The output values are returned as a 
 JSON string with the same format as the string used to set up the slider.
-
 
 ##How to use
 The slider is built on JQuery 1.6.2 and JQuery UI 1.8.16. These are
