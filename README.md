@@ -1,14 +1,14 @@
-RatioSlider version 0.1 for OpenIDEO
-------------------------------------
+#RatioSlider version 0.1 for OpenIDEO
+
 Copyright 2011, Tobias Toft, IDEO Llc
 
-Thanks to the brilliant people behind JQuery
+* Thanks to the brilliant people behind JQuery
 http://jquery.com
 
-JQuery UI
+* JQuery UI
 http://jqueryui.com
 
-And the jquery-json plugin
+*And the jquery-json plugin
 http://code.google.com/p/jquery-json/
 
 Date: 6 September 2011
@@ -16,16 +16,14 @@ Date: 6 September 2011
 ***
 
 
-DESCRIPTION
------------
+##Description
 Replaces any DOM element with a segmented slider. The slider contains a 
 hidden form field with the same name as the replaced element, containing 
 the output values from the slider. The output values are returned as a 
 JSON string with the same format as the string used to set up the slider.
 
 
-HOW TO USE
------------
+##How to use
 The slider is built on JQuery 1.6.2 and JQuery UI 1.8.16. These are
 included in this package, however, can be left out if the site is
 already using JQuery.
@@ -56,7 +54,7 @@ the desired segments and the total value (e.g. 130% for overprovisioning).
 
 A new slider is configured like this:
 
-var mySlider = new RatioSlider(DOMobject, config);
+	var mySlider = new RatioSlider(DOMobject, config);
 
 Where DOMobject is the object to replace (e.g. a text field). The 'config'
 parameter is optional, if omitted the RatioSlider class will look for a
