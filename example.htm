@@ -8,14 +8,14 @@
 	<script type="text/javascript" src="jquery-ui-1.8.16.custom.min.js"></script>
 	<script type="text/javascript" src="jquery.json-2.2.min.js"></script>
 	
+	<link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
 	<script type="text/javascript" src="ratiosegment.js"></script>
 	<script type="text/javascript" src="ratioslider.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
 
 	<script>
-	  $(document).ready(function() {
-	  	var rs1 = new RatioSlider("ratioslider1");			  
-	  	var rs2 = new RatioSlider("ratioslider2", {"segments":{"Cheese burger":0.3,"Kebab":0.3,"Falafel":0.1,"Hot dog":0.3},"total":70});
+	    $(document).ready(function() {	  	
+	    	var rs1 = new RatioSlider("ratioslider1");			  
+		  	var rs2 = new RatioSlider("ratioslider2", {"segments":{"Cheese burger":0.25,"Kebab":0.25,"Falafel":0.25,"Hot dog":0.25},"total":100});
 	  });
   	</script>
   </head>
@@ -28,7 +28,7 @@
 	<p>
 		<input type="text" id="ratioslider2" />
   	</p>
-  	<p>
+  	<p style="padding-top:50px">
   		<input type="submit" value="Submit" />
   	</p>
   	</form>

@@ -22,9 +22,9 @@ function RatioSegment(owner){
 	this.label = "Undefined";
 	this.wentSmaller = false;
 	
-	//this.originalRight; <-- We don't really need to declare these guys here
-	//this.originalRatio;     but they're nice as a reminder that they exist
-	//this.originalWidth;
+	this.originalRight; //<-- We don't really need to declare these guys here
+	this.originalRatio; //    but they're nice as a reminder that they exist
+	this.originalWidth; // 
 }
 
 RatioSegment.prototype.addHtml = function(){
@@ -52,7 +52,6 @@ RatioSegment.prototype.setRatio = function(val){ //always in fractions of 1
 		val = this.originalRatio;
 	}
 	$(this.obj).width(val*$('#'+this.owner.elmId).width());
-	
 }
 
 RatioSegment.prototype.getRatio = function(){

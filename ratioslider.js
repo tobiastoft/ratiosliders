@@ -50,24 +50,25 @@ RatioSlider.prototype.init  = function(){
 	//Add handles and generally set this up
 	$('#'+this.elmId+'>#reset').bind('click', {that:this}, this.resetSlider);
 	
-	
-	
 	var that = this; //keep scope
 	$.each(this.initialSetup.segments, function(sName, sVal){
        that.addSegment(sName, sVal);
     })
 
 	this.attachHandles();
-	this.adjustSegments();
+	this.adjustSegments();	
 	this.outputData(true); //Write initial value to hidden form field
 }
 
 RatioSlider.prototype.resetSlider = function(event,ui){
 	var that = event.data.that;
+
 	for (var i=0;i<that.segments.length;i++){
 		that.segments[i].setRatio();
+		that.segments[i].originalRight = $(that.segments[i].obj).width()+$(that.segments[i].obj).offset().left;
+			that.adjustSegments();
+
 	}
-	that.adjustSegments();
 }
 
 RatioSlider.prototype.addSegment = function(label, rat){
@@ -90,13 +91,21 @@ RatioSlider.prototype.attachHandles = function(){
 			$(this.segments[i].obj).bind('resizestart', {that: this}, this.startResizing);
 			$(this.segments[i].obj).bind('resizestop', {that: this}, this.stopResizing);
 		}
+		
+		if (i>0 && i<range-1){
+			$(this.segments[i].obj).addClass('mid');
+		}
 	}
+	
+	$(this.segments[0].obj).addClass('first');
+	$(this.segments[range-1].obj).addClass('last');	
 }
 
 RatioSlider.prototype.startResizing = function(event, ui){
 	var that = event.data.that;
 	$(ui.element).bind('resize', {that:that}, that.adjustSegments);
 	var maxWidth=0;
+	
 	for (var i=0; i<that.segments.length-1; i++){
 		that.segments[i].originalRight = $(that.segments[i].obj).width()+$(that.segments[i].obj).offset().left;
 		that.segments[i].originalWidth = $(that.segments[i].obj).width();
@@ -122,13 +131,13 @@ RatioSlider.prototype.stopResizing = function(event, ui){
 RatioSlider.prototype.adjustSegments = function(event, ui){
 	var that;
 	var x = 0;
-	
+
 	try {
 		that = event.data.that;
 	} catch (e) {
 		that = this;
 	}
-	
+		
 	//Reposition other elements
 	var parentWidth = $('#'+that.elmId).width(); //max width of the segments combined
 
@@ -143,7 +152,7 @@ RatioSlider.prototype.adjustSegments = function(event, ui){
 	} catch (e) {
 		currentIndex = 0;
 	}
-	
+		
 	try {
 		x = event.pageX - $(ui.element).offset().left;
 	} catch (e){}
@@ -235,7 +244,7 @@ RatioSlider.prototype.adjustSegments = function(event, ui){
 
 	//For storing shift levels
 	var ladder = new Array();
-	
+
 	//Loop through and check for overlaps
 	for (var i=that.segments.length-1; i>=0; i--){
 		var curObj = that.segments[i];
@@ -262,8 +271,16 @@ RatioSlider.prototype.adjustSegments = function(event, ui){
 	
 	for (var i=0; i<ladder.length; i++){
 		$('#'+that.segments[i].popupId+">#content").removeClass(); //Remove all existing
+		//mid
+		if (i>0 && i<that.segments.length-1){
+			$('#'+that.segments[i].popupId+">#content").addClass('mid');
+		}
 		$('#'+that.segments[i].popupId+">#content").addClass("overlap-"+ladder[i]); //Add shift lvl
 	}
+	
+	//first, last
+	$('#'+that.segments[0].popupId+">#content").addClass('first');
+	$('#'+that.segments[that.segments.length-1].popupId+">#content").addClass('last');
 	
 	//Write out the ratios
 	that.returnRatios();

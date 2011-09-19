@@ -31,14 +31,17 @@ The following files would normally need to be included in the html:
 	<script type="text/javascript" src="jquery.json-2.2.min.js"></script>
 	
 	<!-- RatioSlider -->
+	<link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
 	<script type="text/javascript" src="ratiosegment.js"></script>
 	<script type="text/javascript" src="ratioslider.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/ratioslider.css" />
+	
 	
 Alternatively, instead of ratiosegment.js and ratioslider.js the file 
 'ratioslider.min.js' can be used, which is a minified version of the
 two uncompressed files. It has been compressed using Google's Closure
-Compiler. See 'example.min.htm' for an example.
+Compiler. See 'example.min.htm' for an example. Please note, that since 
+this is relying on the JQuery document.ready() function, the CSS for the 
+slider needs to be loaded before the JS.
 
 There are two ways of configuring the slider. It can be done as a part
 of the creation of the RatioSlider object or the configuration can be
