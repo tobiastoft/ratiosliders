@@ -1,4 +1,4 @@
-#RatioSlider version 0.1 for OpenIDEO
+# RatioSlider version 0.1 for OpenIDEO
 
 Copyright 2011, Tobias Toft, IDEO Llc
 
@@ -11,13 +11,13 @@ http://code.google.com/p/jquery-json/
 
 6 September 2011
 
-##Description
+## Description
 Replaces any DOM element with a segmented slider. The slider contains a 
 hidden form field with the same name as the replaced element, containing 
 the output values from the slider. The output values are returned as a 
 JSON string with the same format as the string used to set up the slider.
 
-##How to use
+## How to use
 The slider is built on JQuery 1.6.2 and JQuery UI 1.8.16. These are
 included in this package, however, can be left out if the site is
 already using JQuery.
